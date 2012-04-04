@@ -12,15 +12,18 @@ AUTOLOAD_SITECONF = 'indexes'
 
 SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 
+SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
+
 INSTALLED_APPS = (
 #    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
+    'django.contrib.staticfiles',
     'djangotoolbox',
     'autoload',
     'dbindexer',
-
+    'map',
     # djangoappengine should come last, so it can override a few manage.py commands
     'djangoappengine',
 )
@@ -46,5 +49,23 @@ TEST_RUNNER = 'djangotoolbox.test.CapturingTestSuiteRunner'
 
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
+
+# Absolute path to the directory static files should be collected to.
+# Don't put anything in this directory yourself; store your static files
+# in apps' "static/" subdirectories and in STATICFILES_DIRS.
+# Example: "/home/media/media.lawrence.com/static/"
+STATIC_ROOT = os.path.join(SITE_ROOT, '/static/')
+
+# URL prefix for static files.
+# Example: "http://media.lawrence.com/static/"
+STATIC_URL = "/static/"
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(SITE_ROOT, 'static'),
+)
 
 ROOT_URLCONF = 'urls'
