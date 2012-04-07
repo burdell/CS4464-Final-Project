@@ -1,84 +1,31 @@
-
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>SynergyCloud Social Map</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <link href="/static/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/bootstrap-responsive.min.css" rel="stylesheet">
-
-
-    <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-    </style>
-    <script src="http://code.jquery.com/jquery-1.5.2.min.js"></script>
-    <script type="text/javascript"
-      src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBdiSflf9kIwXQEQmCA_TfhJCeY0kafbIs&sensor=true">
-    </script>
-    <script type="text/javascript">
-   
-  $(document).ready(function() {
-    var latlng = new google.maps.LatLng(39.8106460, -98.5569760);
-
-    var myOptions = {
-      zoom: 4,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  });
-
-
-  function initialize() {
-    var latlng = new google.maps.LatLng(39.8106460, -98.5569760);
-
-    var myOptions = {
-      zoom: 4,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  }
-
-  </script>
-  </head>
-  <body>
-  <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">SynergyCloud Social Map</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
+{% extends "base.html" %}
+{% block title %}
+SyngeryCloud Social Map
+{% endblock %}
+{% block content %}
 
      <div class="container">
-
-      <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
         <h1>SynergyCloud Social Map</h1>
-        <p>Synergized, cloud-based, social media marketing solution.<br /><br />Revitalize. Connect. Solutionize.</p>
-      </div>
+        <h4>Synergized, cloud-based, social media marketing solution.</h4><br /><br />
+        <p>Revitalize. Connect. Solutionize.<br />In our busy lives, what more could one want other than to streamline their workflow? Meet SynergyCloud Social Map. (Don't worry, it doesn't bite)</p>
+        <p>Your on the go. We get it. Revitalize the things you once thought were think-worthy. Inspire those around you to greatnesty. Be the synergy. </p>
+        <p>We invite you to take a look around. Slip into something comfortable. Take off your shoes. Strike up a conversation with us about the oak mahagony coffee table you've oogled since you've walked in. Let your eyes wander to the book on large African cats lying affine to the afghan given to us by a Peruvian monk.</p>
+        <p>That's right. You're home</p> 
       </div>
 
-      <div id="map_canvas" style="width: 80%; height: 80%; margin-left: 10%; padding-bottom: 20px;"></div> 
-
-</body>
-</html>
+      <div class="row">
+        <div class="span4">
+          <blockquote>
+            <p>I'd lost my synergy. SynergyCloud Social Map gave it back to me</p>
+            <small>Martin Luther King, Jr.</small>
+            </blockquote>
+        </div>
+        <div class="span4 pull-right">
+        <blockquote>
+            <p>I'd lost the cloud. I needed the cloud. I got the cloud. Thank You, SynergyCloud Social Map.</p>
+            <small>Mother Theresa</small>
+            </blockquote>
+        </div>
+      </div>
+{% endblock %}

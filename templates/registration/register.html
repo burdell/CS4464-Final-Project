@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}
+Register
+{% endblock %}
+{% block content %}
+
+<div class="container">
+	<div class="hero-unit">
+		<h2>{{ title_info }}</h2>
+	</div>
+
+	<div class="row">
+		<div class="span14">
+			<form action="" method="post">{% csrf_token %}
+			{% for field in form %}
+					<div class="clearfix{% if field.errors %} error{% endif %}">
+			            {{ field.label_tag }}	
+		            	<div class="input">
+		            		{{ field }}
+		            		<span class="help-inline">{% for error in field.errors %}{{ error }}{% endfor %}</span>
+		            	</div>
+		            	
+		            </div>
+			{% endfor %}
+			<div class="actions"><button class="btn">Submit</button></div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
