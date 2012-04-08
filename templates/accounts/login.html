@@ -1,19 +1,34 @@
 {% extends "base.html" %}
-
+{% load url from future %}
+{% block title %}SynergyCloud Login{% endblock %}
 {% block content %}
+<div class="container">
+   <div class="row">
+       <div class="hero-unit">
+            <h2>Login to SynergyCloud</h2>
+       </div>
+  	</div>
 
-	{% if form.errors %}
-		<p class="error"> Sorry, that's not a valid username or password</p>
+  	{% if form.errors %}
+		<div class="alert-message error" data-alert="alert">
+		<a class="close" href="#">&times;</a>
+		<p>Your username and/or password are incorrect, or you are not an active user in the system.</p>
+		</div>
 	{% endif %}
-
-<form action='.' method="post">
-	<label for="username">Username:</label>
-	<input type="text" name="username" value="" id="username">
-	<label for="password">Password:</label>
-	<input type="password" name="password" value="" id="password">
-
-	<input type="submit" value="login" />
-	<input type="hidden" name="next" value="{{ next }}" />
-<form action='.' method='post'>
+	
+	<div class="row">
+		<div class="span12">
+		<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+			{% csrf_token %}
+			{% include "form.html" with form=form %}
+			<div class="clearfix">
+				<div class="input">
+					<button class="btn primary">Login</button>
+				</div>
+			</div>
+			<input type="hidden" name="next" value="{{ next }}" />
+		</form>
+		</div>
+	</div>
 
 {% endblock %}

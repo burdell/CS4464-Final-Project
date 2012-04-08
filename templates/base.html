@@ -65,8 +65,13 @@
           <a class="brand" href="/">SynergyCloud Social Map</a>
           <div class="nav-collapse">
             <ul class="nav">
-            <li style="padding-right: 5px;"><a style="padding: 0;" href="register"><button class="btn btn-primary" type="button">Sign Up</button></a></li>
-             <li><a style="padding: 0;" href="#"><button class="btn btn-success" type="button">Sign In</button></a></li>
+            {% if user.is_authenticated %}
+              <li style="padding-right: 5px;"><a style="padding: 0;" href="register"><button class="btn btn-primary" type="button">Profile</button></a></li>
+              <li style="padding-right: 5px;"><a style="padding: 0;" href="/accounts/logout"><button class="btn btn-success" type="button">Log Out</button></a></li>
+            {% else %}
+              <li style="padding-right: 5px;"><a style="padding: 0;" href="/register"><button class="btn btn-primary" type="button">Sign Up</button></a></li>
+               <li><a style="padding: 0;" href="/accounts/login"><button class="btn btn-success" type="button">Sign In</button></a></li>
+            {% endif %}
           </div><!--/.nav-collapse -->
         </div>
       </div>
