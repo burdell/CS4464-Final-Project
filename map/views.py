@@ -25,3 +25,7 @@ def register(request):
 	return render_to_response('registration/register.html',
 					   {'form': form, 'title_info': 'Register. Synergize. Repeat.'},
 					   context_instance=RequestContext(request))
+
+def map_page(request):
+	return render_to_response('map.html', {'user': request.user},
+					   context_instance=RequestContext(request))

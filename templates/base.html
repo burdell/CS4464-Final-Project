@@ -22,38 +22,8 @@
     <script type="text/javascript"
       src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBdiSflf9kIwXQEQmCA_TfhJCeY0kafbIs&sensor=true">
     </script>
-    <script type="text/javascript">
-   
-  $(document).ready(function() {
-    var latlng = new google.maps.LatLng(39.8106460, -98.5569760);
-
-    var myOptions = {
-      zoom: 4,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  });
-
-
-  function initialize() {
-    var latlng = new google.maps.LatLng(39.8106460, -98.5569760);
-
-    var myOptions = {
-      zoom: 4,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-
-    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-  }
-
-  $('.dropdown-toggle').dropdown()
-
-  </script>
   </head>
-  <body>
+  <body onload="initialize()">
   <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
