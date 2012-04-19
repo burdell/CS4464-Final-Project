@@ -1,7 +1,9 @@
-from map.models import RegistrationForm
+from map.models import RegistrationForm, MapPost
 from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
+from django.http import HttpResponse
+from django.core import serializers
 
 def register(request):
 	form = RegistrationForm()
@@ -27,5 +29,20 @@ def register(request):
 					   context_instance=RequestContext(request))
 
 def map_page(request):
-	return render_to_response('map.html', {'user': request.user},
+	map_posts = serializers.serialize('json', MapPost.objects.all())
+	print map_posts
+	return render_to_response('map.html', {'user': request.user, 'map_posts': map_posts},
 					   context_instance=RequestContext(request))
+
+def map_post(request):
+	success = "FIAL"
+	if request.is_ajax():
+		if request.method == 'POST':
+			lat = request.POST['lat']
+			lon = request.POST['lon']
+			text = request.POST['text']
+
+			MapPost.objects.create(lat=lat, lon=lon, text=text)
+			success = "SUCCESS"
+					
+	return HttpResponse(success)

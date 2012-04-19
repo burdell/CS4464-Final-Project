@@ -7,7 +7,10 @@ from django import forms
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 
-
+class MapPost(models.Model):
+	lat = models.DecimalField(max_digits=30, decimal_places=10)
+	lon = models.DecimalField(max_digits=30, decimal_places=10)
+	text = models.CharField(max_length=200)
 
 #forms
 class RegistrationForm(forms.Form):
