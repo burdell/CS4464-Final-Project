@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from django.core import serializers
+
 
 def register(request):
 	form = RegistrationForm()
@@ -29,9 +29,14 @@ def register(request):
 					   context_instance=RequestContext(request))
 
 def map_page(request):
-	map_posts = serializers.serialize('json', MapPost.objects.all())
-	print map_posts
-	return render_to_response('map.html', {'user': request.user, 'map_posts': map_posts},
+	map_posts = MapPost.objects.all()
+	js_array = "var map_posts = ["
+	for map_post in map_posts:
+		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\"], " 
+	js_array += "]"
+	js_array = js_array.replace("], ]", "]]")
+
+	return render_to_response('map.html', {'user': request.user, 'map_posts': js_array},
 					   context_instance=RequestContext(request))
 
 def map_post(request):

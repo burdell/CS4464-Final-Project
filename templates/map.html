@@ -27,8 +27,10 @@
       var marker_array = []; //eventually we'll send these to the DB
       var temp_marker; //marker that gets put down on map click
       var tempLatLng; //need to store coords if marker becomes a post
-      $(document).ready(function() {
+      
+      {{ map_posts|safe }} //javaacript array built in the view
 
+      $(document).ready(function() {
         //hide the form for making post
         $(".postform").hide();
 
@@ -42,6 +44,22 @@
         }
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
 
+
+        //put all markers from DB on map
+        var post_window; var post_latlng; var post_marker;
+        for (post in map_posts){
+               post_window = new google.maps.InfoWindow({content: post[2]});
+              
+              post_latlng = new google.maps.LatLng(post[0], post[1]);
+              post_marker = new google.maps.Marker({
+                position: post_latlng,
+                map: map,
+              });
+              //attach info to marker
+              google.maps.event.addListener(post_marker, 'click', function(){
+                post_window.open(map, post_marker);
+              });
+        }
 
         //click event for map -- form slides down, marker is placed on map
         google.maps.event.addListener(map, 'click', function(event){
@@ -99,10 +117,11 @@
               });
               //clean-up time
               $("input.postinput").val('');
-          });
-
-          $(this).parent().slideToggle('slow');
-          LEAVE_NO_SURVIVORS(); 
+              perm_marker.setMap(map);
+              $('.postform').slideToggle('slow');
+              LEAVE_NO_SURVIVORS(); 
+              return false;
+            });
           return false;
         });
 
@@ -174,7 +193,7 @@
     <br />
     <br />
     <br />
-    <div class="span8" style="padding-left:15%;" id="postform">
+    <div class="span8 post" style="padding-left:15%;" id="postformdiv">
       <form class="well form-inline postform">
         <input type="text" class="postinput" placeholder="Post Your Post">
         </label>
