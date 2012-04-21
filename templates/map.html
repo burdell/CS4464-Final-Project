@@ -47,20 +47,22 @@
 
         //put all markers from DB on map
         var post_window; var post_latlng; var post_marker;
-        for (var i=0; i<map_posts.length;i++){
-              post_window = new google.maps.InfoWindow({content: map_posts[i][2]});
-              
+        post_window = new google.maps.InfoWindow({content: ""});
+        for (var i=0; i<map_posts.length; i++){    
               post_latlng = new google.maps.LatLng(map_posts[i][0], map_posts[i][1]);
               post_marker = new google.maps.Marker({
                 position: post_latlng,
                 map: map,
+                html: map_posts[i][2]
               });
               //attach info to marker
               google.maps.event.addListener(post_marker, 'click', function(){
-                post_window.open(map, post_marker);
+                post_window.setContent(this.html);
+                post_window.open(map, this);
               });
               
               post_marker.setMap(map);
+              marker_array.push(post_marker);
         }
 
         //click event for map -- form slides down, marker is placed on map
@@ -73,7 +75,7 @@
           tempLatLng = event.latLng
           marker = new google.maps.Marker({
             position: tempLatLng,
-            map: map
+            map: map,
           });
 
           //assign to temp marker & show
