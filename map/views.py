@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 
+def prof_redirect(request):
+	return redirect('/map_page/', permanent=True)
+
 def register(request):
 	form = RegistrationForm()
 	if request.method == 'POST':
@@ -14,15 +17,15 @@ def register(request):
 			username = form.cleaned_data['username']
 			first_name = form.cleaned_data['first_name']
 			last_name = form.cleaned_data['last_name']
-			password = form.cleaned_data['password1']
-			
+			password = form.cleaned_data['password2']
+			email = username + '@gmail.com'		
 
-			user = User.objects.create_user(username, password)
+			user = User.objects.create_user(username, email, password)
 			user.first_name = first_name
 			user.last_name = last_name
 			user.save()
 
-			return render_to_response('registration/registration_complete.html', {'user': user})
+			return render_to_response('registration/registration_complete.html', {})
 
 	return render_to_response('registration/register.html',
 					   {'form': form, 'title_info': 'Register. Synergize. Repeat.'},

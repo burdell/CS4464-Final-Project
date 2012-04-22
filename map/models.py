@@ -28,7 +28,7 @@ class RegistrationForm(forms.Form):
 			raise forms.ValidationError("You must confirm your password")
 		if password1 != password2:
 			raise forms.ValidationError("Your passwords do not match")
-		return password1
+		return password2
 
 	def clean_username(self):
 		username = self.cleaned_data['username']
