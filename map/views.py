@@ -42,7 +42,7 @@ def map_page(request, option):
 
 	js_array = "var map_posts = ["
 	for map_post in map_posts:
-		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\"], " 
+		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\", \"" + map_post.user.username + "\"], " 
 	js_array += "]"
 	js_array = js_array.replace("], ]", "]]")
 

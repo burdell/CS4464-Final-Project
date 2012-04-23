@@ -53,7 +53,7 @@
               post_marker = new google.maps.Marker({
                 position: post_latlng,
                 map: map,
-                html: map_posts[i][2]
+                html: "<div class='window_post'><p>"+map_posts[i][2]+"</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>",
               });
               //attach info to marker
               google.maps.event.addListener(post_marker, 'click', function(){
@@ -108,7 +108,8 @@
           $.post("/map_page/post/", {lat: tempLatLng.lat(), lon: tempLatLng.lng(), text: post_content}, 
             function(success){
               //create the info window
-              info_window = new google.maps.InfoWindow({content: post_content});
+              window_content = "<div class='window_post'><p>"+post_content+"</p><hr /><h6>Posted by {{ user.username }}</h6>";
+              info_window = new google.maps.InfoWindow({content: window_content});
               //create the marker
               perm_marker = new google.maps.Marker({
                 position: tempLatLng,
