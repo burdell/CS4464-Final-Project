@@ -27,6 +27,17 @@
       var marker_array = []; //eventually we'll send these to the DB
       var temp_marker; //marker that gets put down on map click
       var tempLatLng; //need to store coords if marker becomes a post
+
+      //icon variables
+      var accident = '/static/accident.png';
+      var advertisement = '/static/advertisement.png';
+      var crime = '/static/crime.png';
+      var fire = '/static/fire.png';
+      var landmark = '/static/landmark.png';
+      var news_story = '/static/news_story.png';
+      var party = '/static/party.png';
+      var status_update = '/static/status_update.png';
+      var steer_clear = '/static/steer_clear.png';
       
       {{ map_posts|safe }} //javaacript array built in the view
 
@@ -54,6 +65,7 @@
                 position: post_latlng,
                 map: map,
                 html: "<div class='window_post'><p>"+map_posts[i][2]+"</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>",
+                icon: '/static/' + map_posts[i][4] + '.png',
               });
               //attach info to marker
               google.maps.event.addListener(post_marker, 'click', function(){
@@ -89,23 +101,38 @@
           return false;
         });
 
+         //gets selecion from dropdown box
+    function getPostType()
+    {
+      var posttypeinput=document.getElementById("posttypeinput");
+      var type=posttypeinput.options[posttypeinput.selectedIndex].value;
+      return type;
+    }
+
 
         //post that sucka
         $(".makepost").click(function(){
-         // make sure there's a marker on the map and people actually posted something about it
+         // make sure there's a marker on the map
           if (!temp_marker)
             return false;
 
+          //make sure people actually chose a post type
           var post_content = $("input.postinput").val();
+          var post_type_var = getPostType();
           if (post_content == ""){
             $("input.postinput").focus();
             return false;
           }
+          if (post_type_var == ""){
+            $("input.posttypeinput").focus();
+            return false;
+          }
+      
           
           var perm_marker;
           var info_window;
           //send AJAX request to DB to store post
-          $.post("/map_page/post/", {lat: tempLatLng.lat(), lon: tempLatLng.lng(), text: post_content}, 
+          $.post("/map_page/post/", {lat: tempLatLng.lat(), lon: tempLatLng.lng(), text: post_content, post_type: post_type_var}, 
             function(success){
               //create the info window
               window_content = "<div class='window_post'><p>"+post_content+"</p><hr /><h6>Posted by {{ user.username }}</h6>";
@@ -114,6 +141,7 @@
               perm_marker = new google.maps.Marker({
                 position: tempLatLng,
                 map: map,
+                icon: '/static/' + post_type_var + '.png',
               });
               //attach info to marker
               google.maps.event.addListener(perm_marker, 'click', function(){
@@ -125,6 +153,7 @@
 
               //clean-up time
               $("input.postinput").val('');
+              $("input.posttypeinput").empty();
               perm_marker.setMap(map);
               $('.postform').slideToggle('slow');
               LEAVE_NO_SURVIVORS(); 
@@ -211,7 +240,19 @@
     <div class="span8 post" style="padding-left:10%;" id="postformdiv">
       <form class="well form-inline postform">
         <input type="text" class="postinput" placeholder="Post Your Post">
-        </label>
+        <select  id="posttypeinput">
+        <option></option>
+        <option value="accident">Accident</option>
+        <option value="advertisement">Advertisement</option>
+        <option value="crime">Crime</option>
+        <option value="fire">Fire</option>
+        <option value="landmark">Landmark</option>
+        <option value="news_story">News Story</option>
+        <option value="party">Party</option>
+        <option value="status_update">Status Update</option>      
+        <option value="steer_clear">Steer Clear of Here</option>
+      </select>
+      <input type="text" id="type" size="20" style="display:none;">
         <button class="btn cancelpost">Cancel</button>
         <button type="submit" class="btn btn-success makepost">Post</button>
         

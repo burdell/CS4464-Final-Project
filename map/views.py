@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
+import datetime
 
 def prof_redirect(request):
 	return redirect('/map_page/', permanent=True)
@@ -42,7 +43,7 @@ def map_page(request, option):
 
 	js_array = "var map_posts = ["
 	for map_post in map_posts:
-		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\", \"" + map_post.user.username + "\"], " 
+		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\", \"" + map_post.user.username + "\", \"" + map_post.post_type + "\"], " 
 	js_array += "]"
 	js_array = js_array.replace("], ]", "]]")
 
@@ -56,8 +57,11 @@ def map_post(request):
 			lat = request.POST['lat']
 			lon = request.POST['lon']
 			text = request.POST['text']
+			post_type = request.POST['post_type']
+			timestamp = datetime.datetime.now()
+            
 
-			MapPost.objects.create(lat=lat, lon=lon, text=text, user=request.user)
+			MapPost.objects.create(lat=lat, lon=lon, text=text, user=request.user, post_type=post_type, posted_on=timestamp)
 			success = "SUCCESS"
 					
 	return HttpResponse(success)
