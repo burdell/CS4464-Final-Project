@@ -11,6 +11,7 @@ class MapPost(models.Model):
 	lat = models.DecimalField(max_digits=30, decimal_places=10)
 	lon = models.DecimalField(max_digits=30, decimal_places=10)
 	text = models.CharField(max_length=200)
+	user = models.OneToOneField(User)
 
 #forms
 class RegistrationForm(forms.Form):

@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 
 def prof_redirect(request):
@@ -30,9 +31,15 @@ def register(request):
 	return render_to_response('registration/register.html',
 					   {'form': form, 'title_info': 'Register. Synergize. Repeat.'},
 					   context_instance=RequestContext(request))
+@login_required
+def map_page(request, option):
+	if option == 'all':
+		map_posts = MapPost.objects.all()
+	elif option == 'me':
+		map_posts = MapPost.objects.filter(user=request.user)
+	else:
+		map_posts = MapPost.objects.all()
 
-def map_page(request):
-	map_posts = MapPost.objects.all()
 	js_array = "var map_posts = ["
 	for map_post in map_posts:
 		js_array += "[" + str(map_post.lat) + ", " + str(map_post.lon) + ", \"" + map_post.text + "\"], " 
@@ -50,7 +57,7 @@ def map_post(request):
 			lon = request.POST['lon']
 			text = request.POST['text']
 
-			MapPost.objects.create(lat=lat, lon=lon, text=text)
+			MapPost.objects.create(lat=lat, lon=lon, text=text, user=request.user)
 			success = "SUCCESS"
 					
 	return HttpResponse(success)

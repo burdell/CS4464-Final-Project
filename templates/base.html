@@ -36,12 +36,13 @@
           <div class="nav-collapse">
             <ul class="nav">
             {% if user.is_authenticated %}
-              <li style="padding-right: 5px;"><a style="padding: 0;" href="register"><button class="btn btn-primary" type="button">Profile</button></a></li>
+              <li style="padding-right: 5px;"><a style="padding: 0;" href="/map_page/"><button class="btn btn-primary" type="button">Map</button></a></li>
               <li style="padding-right: 5px;"><a style="padding: 0;" href="/accounts/logout"><button class="btn btn-success" type="button">Log Out</button></a></li>
             {% else %}
               <li style="padding-right: 5px;"><a style="padding: 0;" href="/register"><button class="btn btn-primary" type="button">Sign Up</button></a></li>
                <li><a style="padding: 0;" href="/accounts/login"><button class="btn btn-success" type="button">Sign In</button></a></li>
             {% endif %}
+            </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
