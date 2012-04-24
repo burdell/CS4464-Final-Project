@@ -15,5 +15,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', logout, {'template_name': 'index.html'}),
     url(r'^map_page/post/', 'map.views.map_post'),
     url(r'^map_page/(.*)$', 'map.views.map_page'),
-    url(r'^accounts/profile/$', 'map.views.prof_redirect') 
+    url(r'^accounts/profile/$', 'map.views.prof_redirect'),
+    url(r'^friends/friend/$', 'map.views.add_friend'),
+    url(r'^friends/$', 'map.views.friend_list'), 
 )

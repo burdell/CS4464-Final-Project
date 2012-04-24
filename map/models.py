@@ -14,8 +14,11 @@ class MapPost(models.Model):
 	user = models.OneToOneField(User)
 	post_type = models.CharField(max_length=200)
 	posted_on = models.DateTimeField()
-    
 
+class Friendship(models.Model):
+	user = models.IntegerField()
+	friend = models.IntegerField()
+    
 #forms
 class RegistrationForm(forms.Form):
 	first_name = forms.CharField()
