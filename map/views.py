@@ -34,11 +34,7 @@ def register(request):
 					   context_instance=RequestContext(request))
 @login_required
 def map_page(request, option):
-	if option == 'all':
-		map_posts = MapPost.objects.all()
-	elif option == 'me':
-		map_posts = MapPost.objects.filter(user=request.user)
-	else:
+	if option == 'friends':
 		map_posts = []
 		friend_rows = Friendship.objects.filter(user=request.user.pk)
 		friend_list = []
@@ -49,6 +45,11 @@ def map_page(request, option):
 			friend_posts = MapPost.objects.filter(user=User.objects.get(pk=friend))
 			for post in friend_posts:
 				map_posts.append(post)
+	elif option == 'me':
+		map_posts = MapPost.objects.filter(user=request.user)
+	else:
+		map_posts = MapPost.objects.all()
+		
 	
 	js_array = "var map_posts = ["
 	for map_post in map_posts:
