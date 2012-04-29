@@ -16,6 +16,7 @@
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
       .postinput { width: 100%;}
+    .post_video { width: 100%;}
     </style>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
@@ -55,7 +56,6 @@
         }
         map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
 
-
         //put all markers from DB on map
         var post_window; var post_latlng; var post_marker;
         post_window = new google.maps.InfoWindow({content: ""});
@@ -64,7 +64,7 @@
               post_marker = new google.maps.Marker({
                 position: post_latlng,
                 map: map,
-                html: "<div class='window_post'><p>"+map_posts[i][2]+"</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>",
+                html: "<div class='window_post'><p>"+map_posts[i][2]+'</p><iframe width="420" height="315" src="'+map_posts[i][5]+'" frameborder="0" allowfullscreen></iframe>' + "</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>",
                 icon: '/static/' + map_posts[i][4] + '.png',
               });
               //attach info to marker
@@ -108,8 +108,7 @@
       var type=posttypeinput.options[posttypeinput.selectedIndex].value;
       return type;
     }
-
-
+  
         //post that sucka
         $(".makepost").click(function(){
          // make sure there's a marker on the map
@@ -119,6 +118,7 @@
           //make sure people actually chose a post type
           var post_content = $("input.postinput").val();
           var post_type_var = getPostType();
+      var post_video = $("input.post_video").val();
           if (post_content == ""){
             $("input.postinput").focus();
             return false;
@@ -132,10 +132,10 @@
           var perm_marker;
           var info_window;
           //send AJAX request to DB to store post
-          $.post("/map_page/post/", {lat: tempLatLng.lat(), lon: tempLatLng.lng(), text: post_content, post_type: post_type_var}, 
+          $.post("/map_page/post/", {lat: tempLatLng.lat(), lon: tempLatLng.lng(), text: post_content, post_type: post_type_var, post_video: post_video},
             function(success){
               //create the info window
-              window_content = "<div class='window_post'><p>"+post_content+"</p><hr /><h6>Posted by {{ user.username }}</h6>";
+              window_content = "<div class='window_post'><p>"+post_content+"<br><br>Refresh page to see video"+"</p><hr /><h6>Posted by {{ user.username }}</h6>";
               info_window = new google.maps.InfoWindow({content: window_content});
               //create the marker
               perm_marker = new google.maps.Marker({
@@ -153,7 +153,8 @@
 
               //clean-up time
               $("input.postinput").val('');
-              $("input.posttypeinput").empty();
+        $("input.post_video").val('');
+              $("input.posttypeinput").empty();       
               perm_marker.setMap(map);
               $('.postform').slideToggle('slow');
               LEAVE_NO_SURVIVORS(); 
@@ -232,28 +233,55 @@
     <br />
     <br />
     <br />    
-    <div class="span2 well"  style="float: left;"><h2>{{ user.username }}</h2>
-      <h6>Filter</h6>
+    <div class="span1 well"  style="float: left; width:160px;"><h2>{{ user.username }}</h2>
+      <h3>Filter</36>
+      <hr />
+      <h6>People</h6>
       <a href="all"><button class="btn btn-primary btn-mini" type="button">All Posts</button></a><br /><br />
       <a href="me"><button class="btn btn-primary btn-mini" type="button">My Posts</button></a><br /><br />
       <a href="friends"><button class="btn btn-primary btn-mini" type="button">Friends' Posts</button></a><br /><br />
+      <hr />
+      <h6>Time</h6>
+    <a href="one_hour"><button class="btn btn-primary btn-mini" type="button">1 Hr</button></a>
+    <a href="two_hours"><button class="btn btn-primary btn-mini" type="button">2 Hr</button></a>
+    <a href="three_hours"><button class="btn btn-primary btn-mini" type="button">3 Hr</button></a><br /><br />
+    <a href="one_week"><button class="btn btn-primary btn-mini" type="button">1 Wk</button></a>
+    <a href="two_weeks"><button class="btn btn-primary btn-mini" type="button">2 Wk</button></a>
+    <a href="three_weeks"><button class="btn btn-primary btn-mini" type="button">3 Wk</button></a><br /><br />
+    <a href="one_month"><button class="btn btn-primary btn-mini" type="button">1 Mt</button></a>
+    <a href="two_months"><button class="btn btn-primary btn-mini" type="button">2 Mt</button></a>
+    <a href="three_months"><button class="btn btn-primary btn-mini" type="button">3 Mt</button></a><br /><br />
+    <hr />
+      <h6>Type</h6>
+    <a href="accident"><button class="btn btn-primary btn-mini" type="button">Accidents</button></a><br /><br />
+    <a href="advertisement"><button class="btn btn-primary btn-mini" type="button">Advertisements</button></a><br /><br />
+    <a href="crime"><button class="btn btn-primary btn-mini" type="button">Crimes</button></a><br /><br />
+    <a href="fire"><button class="btn btn-primary btn-mini" type="button">Fires</button></a><br /><br />
+    <a href="landmark"><button class="btn btn-primary btn-mini" type="button">Landmarks</button></a><br /><br />
+    <a href="news_story"><button class="btn btn-primary btn-mini" type="button">News Stories</button></a><br /><br />
+    <a href="party"><button class="btn btn-primary btn-mini" type="button">Parties</button></a><br /><br />
+    <a href="status_update"><button class="btn btn-primary btn-mini" type="button">Status Updates</button></a><br /><br />
+    <a href="steer_clear"><button class="btn btn-primary btn-mini" type="button">Steer Clear</button></a><br /><br />
+
     </div>
+  
     <div class="span8 post" style="padding-left:10%;" id="postformdiv">
       <form class="well form-inline postform">
         <input type="text" class="postinput" placeholder="Post Your Post">
         <select  id="posttypeinput">
-        <option></option>
-        <option value="accident">Accident</option>
-        <option value="advertisement">Advertisement</option>
-        <option value="crime">Crime</option>
-        <option value="fire">Fire</option>
-        <option value="landmark">Landmark</option>
-        <option value="news_story">News Story</option>
-        <option value="party">Party</option>
-        <option value="status_update">Status Update</option>      
-        <option value="steer_clear">Steer Clear of Here</option>
+      <option></option>
+      <option value="accident">Accident</option>
+      <option value="advertisement">Advertisement</option>
+      <option value="crime">Crime</option>
+      <option value="fire">Fire</option>
+      <option value="landmark">Landmark</option>
+      <option value="news_story">News Story</option>
+      <option value="party">Party</option>
+      <option value="status_update">Status Update</option>      
+      <option value="steer_clear">Steer Clear of Here</option>
       </select>
       <input type="text" id="type" size="20" style="display:none;">
+    <input type="text" class="post_video" placeholder="Add a YouTube Video for even Greater Synergy">
         <button class="btn cancelpost">Cancel</button>
         <button type="submit" class="btn btn-success makepost">Post</button>
         
