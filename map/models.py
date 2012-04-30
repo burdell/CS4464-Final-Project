@@ -14,6 +14,7 @@ class MapPost(models.Model):
 	user = models.OneToOneField(User)
 	post_type = models.CharField(max_length=200)
 	posted_on = models.DateTimeField()
+	post_video = models.CharField(max_length=1000, null=True, blank=True)#
 
 class Friendship(models.Model):
 	user = models.IntegerField()

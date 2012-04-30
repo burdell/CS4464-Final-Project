@@ -59,12 +59,19 @@
         //put all markers from DB on map
         var post_window; var post_latlng; var post_marker;
         post_window = new google.maps.InfoWindow({content: ""});
-        for (var i=0; i<map_posts.length; i++){    
+        for (var i=0; i<map_posts.length; i++){   
+              var html="<div class='window_post'><p>"+map_posts[i][2] 
+              if (map_posts[i][5] != 'None'){
+                html += '</p><iframe width="420" height="315" src="'+ map_posts[i][5] +'" frameborder="0" allowfullscreen></iframe>'; 
+              } else {
+                html += '</p>';
+              }
+              html += "</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>";
               post_latlng = new google.maps.LatLng(map_posts[i][0], map_posts[i][1]);
               post_marker = new google.maps.Marker({
                 position: post_latlng,
                 map: map,
-                html: "<div class='window_post'><p>"+map_posts[i][2]+'</p><iframe width="420" height="315" src="'+map_posts[i][5]+'" frameborder="0" allowfullscreen></iframe>' + "</p><hr /><h6>Posted by " + map_posts[i][3] + "</h6>",
+                html: html,
                 icon: '/static/' + map_posts[i][4] + '.png',
               });
               //attach info to marker
