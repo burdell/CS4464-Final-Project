@@ -6,8 +6,10 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import re
 
+from datetime import *
 import datetime
 
+#gets video id for youtube links
 def youtube(string):
 	if not string:
 		return ''
@@ -23,6 +25,7 @@ def youtube(string):
 def prof_redirect(request):
 	return redirect('/map_page/', permanent=True)
 
+#registers user
 def register(request):
 	form = RegistrationForm()
 	if request.method == 'POST':
@@ -46,9 +49,10 @@ def register(request):
 					   {'form': form, 'title_info': 'Register. Synergize. Repeat.'},
 					   context_instance=RequestContext(request))
 
-
+#page for mape
 @login_required
 def map_page(request, option):
+	#filter out posts made by friends
 	if option == 'friends':
 		map_posts = []
 		friend_rows = Friendship.objects.filter(user=request.user.pk)
@@ -60,10 +64,11 @@ def map_page(request, option):
 			friend_posts = MapPost.objects.filter(user=User.objects.get(pk=friend))
 			for post in friend_posts:
 				map_posts.append(post)
-				
+	#filter out posts made by me			
 	elif option == 'me':
 		map_posts = MapPost.objects.filter(user=request.user)
-
+	
+	#filter posts on time
 	elif option == 'one_hour':                
                 hour_ago = timedelta(hours=1)
                 now = datetime.datetime.now()
@@ -131,10 +136,11 @@ def map_page(request, option):
 		map_posts = MapPost.objects.filter(post_type="status_update")
 	elif option == 'steer_clear':
 		map_posts = MapPost.objects.filter(post_type="steer_clear")              
+	#just filter all
 	else:
 		map_posts = MapPost.objects.all()
 		
-	
+	#construct JavaScript array to be used in template
 	js_array = "var map_posts = ["
 	vid="None"
 	for map_post in map_posts:
@@ -147,9 +153,9 @@ def map_page(request, option):
 	return render_to_response('map.html', {'user': request.user, 'map_posts': js_array},
 					   context_instance=RequestContext(request))
 
-
+#makes new posts on map
 def map_post(request):
-	success = "FIAL"
+	success = "None"
 	if request.is_ajax():
 		if request.method == 'POST':
 			lat = request.POST['lat']
@@ -159,13 +165,15 @@ def map_post(request):
 			timestamp = datetime.datetime.now()
 			post_video = request.POST['post_video']
                         video_ID = youtube(post_video)
-            
+          
 
 			MapPost.objects.create(lat=lat, lon=lon, text=text, user=request.user, post_type=post_type, posted_on=timestamp, post_video=video_ID)
-			success = "SUCCESS"
+			if post_video:
+				success = post_video
 					
 	return HttpResponse(success)
 
+#sorts users by either friend or not friend
 def friend_list(request):
 	friends = Friendship.objects.filter(user=request.user.pk)
 
@@ -181,7 +189,7 @@ def friend_list(request):
 
 	return render_to_response('friends.html', {'user':request.user, 'friend_list':friend_list, 'others':others}, context_instance=RequestContext(request))
 
-
+#create a friendship (one-way)
 def add_friend(request):
 	success = "False"
 	if request.is_ajax():
